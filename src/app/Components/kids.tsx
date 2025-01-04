@@ -4,6 +4,8 @@ import { FiHeart, FiGrid, FiList, FiChevronDown } from "react-icons/fi";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import Image from 'next/image';
 import { memo } from "react";
+import image from "../../../public/banner.jpg"
+import img from "../../../public/kid.jpg"
 
 interface Product {
   id: number;
@@ -79,7 +81,7 @@ const KidsProductPage = () => {
       price: 599,
       originalPrice: 799,
       rating: 4.5,
-      image: "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42",
+      image: img.src,
       isNew: true,
       isTrending: true,
       sizes: ["3T", "4T", "5"],
@@ -92,7 +94,7 @@ const KidsProductPage = () => {
       price: 1499,
       originalPrice: 1999,
       rating: 4.8,
-      image: "https://images.unsplash.com/photo-1513010963904-2fefe6a92780",
+      image: img.src,
       isNew: true,
       isTrending: true,
       sizes: ["4T", "5", "6"],
@@ -105,7 +107,7 @@ const KidsProductPage = () => {
       price: 899,
       originalPrice: 1199,
       rating: 4.8,
-      image: "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["3T", "4T", "5", "6"],
@@ -118,7 +120,7 @@ const KidsProductPage = () => {
       price: 799,
       originalPrice: 999,
       rating: 4.3,
-      image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1",
+      image: img.src,
       isNew: false,
       isTrending: true,
       sizes: ["4T", "5", "6", "7"],
@@ -131,7 +133,7 @@ const KidsProductPage = () => {
       price: 699,
       originalPrice: 899,
       rating: 4.6,
-      image: "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["2T", "3T", "4T"],
@@ -144,7 +146,7 @@ const KidsProductPage = () => {
       price: 1299,
       originalPrice: 1599,
       rating: 4.7,
-      image: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4",
+      image: img.src,
       isNew: false,
       isTrending: true,
       sizes: ["4T", "5", "6", "7"],
@@ -157,7 +159,7 @@ const KidsProductPage = () => {
       price: 1499,
       originalPrice: 1999,
       rating: 4.4,
-      image: "https://images.unsplash.com/photo-1597045566677-8cf032ed6634",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["5", "6", "7", "8"],
@@ -170,7 +172,7 @@ const KidsProductPage = () => {
       price: 299,
       originalPrice: 399,
       rating: 4.2,
-      image: "https://images.unsplash.com/photo-1513010963904-2fefe6a92780",
+      image: img.src,
       isNew: false,
       isTrending: true,
       sizes: ["2T", "3T", "4T"],
@@ -183,7 +185,7 @@ const KidsProductPage = () => {
       price: 899,
       originalPrice: 1199,
       rating: 4.9,
-      image: "https://images.unsplash.com/photo-1562157873-818bc0726f68",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["5", "6", "7", "8"],
@@ -196,7 +198,7 @@ const KidsProductPage = () => {
       price: 399,
       originalPrice: 499,
       rating: 4.8,
-      image: "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["3T", "4T", "5", "6"],
@@ -251,7 +253,7 @@ const KidsProductPage = () => {
   return (
     <div className="min-h-screen bg-[#FAFAFA]">
       {/* Hero Section - Simplified without buttons */}
-      <div className="relative h-[300px] md:h-[400px] bg-cover bg-center" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9')` }}>
+      <div className="relative h-[300px] md:h-[400px] bg-cover bg-center" style={{ backgroundImage: `url(${image.src})` }}>
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white p-4">
           <h1 className="text-2xl md:text-4xl font-bold text-center">Playful & Comfortable Kids Collection</h1>
           <p className="text-lg mt-2">Fun styles for your little ones</p>

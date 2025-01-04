@@ -4,6 +4,8 @@ import { FiHeart, FiGrid, FiList, FiChevronDown } from "react-icons/fi";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import Image from 'next/image';
 import { memo } from "react";
+import image from "../../../public/banner.jpg"
+import img from "../../../public/womens.jpg"
 
 interface Product {
   id: number;
@@ -79,7 +81,7 @@ const WomensProductPage = () => {
       price: 24999,
       originalPrice: 29999,
       rating: 4.5,
-      image: "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03",
+      image: img.src,
       isNew: true,
       isTrending: true,
       sizes: ["S", "M", "L", "XL"],
@@ -92,7 +94,7 @@ const WomensProductPage = () => {
       price: 3999,
       originalPrice: 4999,
       rating: 4.0,
-      image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3",
+      image: img.src,
       isNew: false,
       isTrending: true,
       sizes: ["S", "M", "L", "XL"],
@@ -105,7 +107,7 @@ const WomensProductPage = () => {
       price: 199.99,
       originalPrice: 249.99,
       rating: 4.8,
-      image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["M", "L", "XL"],
@@ -118,7 +120,7 @@ const WomensProductPage = () => {
       price: 79.99,
       originalPrice: 99.99,
       rating: 4.3,
-      image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa",
+      image: img.src,
       isNew: false,
       isTrending: true,
       sizes: ["S", "M", "L", "XL"],
@@ -131,7 +133,7 @@ const WomensProductPage = () => {
       price: 29.99,
       originalPrice: 39.99,
       rating: 4.6,
-      image: "https://images.unsplash.com/photo-1562157873-818bc0726f68",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["S", "M", "L"],
@@ -144,7 +146,7 @@ const WomensProductPage = () => {
       price: 69.99,
       originalPrice: 89.99,
       rating: 4.7,
-      image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3",
+      image: img.src,
       isNew: false,
       isTrending: true,
       sizes: ["One Size"],
@@ -157,7 +159,7 @@ const WomensProductPage = () => {
       price: 84.99,
       originalPrice: 99.99,
       rating: 4.4,
-      image: "https://images.unsplash.com/photo-1572804013427-4d7ca7268217",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["M", "L", "XL"],
@@ -170,7 +172,7 @@ const WomensProductPage = () => {
       price: 89.99,
       originalPrice: 109.99,
       rating: 4.2,
-      image: "https://images.unsplash.com/photo-1594633313593-bab3825d0caf",
+      image: img.src,
       isNew: false,
       isTrending: true,
       sizes: ["S", "M", "L", "XL"],
@@ -183,7 +185,7 @@ const WomensProductPage = () => {
       price: 119.99,
       originalPrice: 149.99,
       rating: 4.9,
-      image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["S", "M", "L"],
@@ -196,7 +198,7 @@ const WomensProductPage = () => {
       price: 199.99,
       originalPrice: 249.99,
       rating: 4.8,
-      image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8",
+      image: img.src,
       isNew: true,
       isTrending: false,
       sizes: ["M", "L", "XL"],
@@ -252,7 +254,7 @@ const WomensProductPage = () => {
   return (
     <div className="min-h-screen bg-[#FAFAFA]">
       {/* Hero Section - Simplified without buttons */}
-      <div className="relative h-[300px] md:h-[400px] bg-cover bg-center" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1483985988355-763728e1935b')` }}>
+      <div className="relative h-[300px] md:h-[400px] bg-cover bg-center" style={{ backgroundImage: `url(${image.src})` }}>
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white p-4">
           <h1 className="text-2xl md:text-4xl font-bold text-center">Elegance Defined – Womens Collection</h1>
         </div>

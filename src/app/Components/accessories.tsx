@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { FiHeart, FiGrid, FiList, FiChevronDown } from "react-icons/fi";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import Image from 'next/image';
+import img from "../../../public/accessories.jpg"
+import image from "../../../public/banner.jpg"
+
 
 const MensProductPage = () => {
   const products = [
@@ -12,7 +15,7 @@ const MensProductPage = () => {
       price: 299.99,
       originalPrice: 399.99,
       rating: 4.5,
-      image: "https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e",
+      image: img.src,
       isNew: true,
       isTrending: true
     },
@@ -22,7 +25,7 @@ const MensProductPage = () => {
       price: 89.99,
       originalPrice: 119.99,
       rating: 4.0,
-      image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083",
+      image: img.src,
       isNew: false,
       isTrending: true
     },
@@ -32,7 +35,7 @@ const MensProductPage = () => {
       price: 199.99,
       originalPrice: 249.99,
       rating: 4.8,
-      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62",
+      image: img.src,
       isNew: true,
       isTrending: false
     },
@@ -70,7 +73,7 @@ const MensProductPage = () => {
   return (
     <div className="min-h-screen bg-[#FAFAFA]">
       {/* Hero Section */}
-      <div className="relative h-[400px] bg-cover bg-center" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49')` }}>
+      <div className="relative h-[400px] bg-cover bg-center" style={{ backgroundImage: `url(${image.src})` }}>
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white">
           <h1 className="text-4xl font-bold mb-6">Style Meets Sophistication – Accessories Collection</h1>
           <div className="flex space-x-4">

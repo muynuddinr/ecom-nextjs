@@ -1,5 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
+import img1 from "../../../public/mens.jpg"
+import img2 from "../../../public/kid.jpg"
+import img3 from "../../../public/womens.jpg"
 
 interface TopPickItem {
   id: number;
@@ -13,21 +16,21 @@ const topPicksData: TopPickItem[] = [
   {
     id: 1,
     title: "Premium Headphones",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000",
+    image: img1.src,
     price: 24999,
     category: "Audio"
   },
   {
     id: 2,
     title: "Wireless Speaker",
-    image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=1000",
+    image: img2.src,
     price: 15999,
     category: "Audio"
   },
   {
     id: 3,
     title: "Smartwatch",
-    image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=1000",
+    image: img3.src,
     price: 19999,
     category: "Wearables"
   },

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import img from "../../../public/banner.jpg"
 
 const Banner = () => {
   const [activeCategory, setActiveCategory] = useState(0);
@@ -12,8 +13,8 @@ const Banner = () => {
       title: "Women's Collection",
       subtitle: "NEW SEASON",
       description: "Elevate your style with our latest collection",
-      mainImage: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2000",
-      smallImage: "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=300",
+      mainImage: img.src,
+      smallImage: img.src,
       accent: "bg-rose-500",
       link: "/womens"
     },
@@ -21,8 +22,8 @@ const Banner = () => {
       title: "Men's Collection",
       subtitle: "URBAN ESSENTIALS",
       description: "Contemporary styles for the modern man",
-      mainImage: "https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6?q=80&w=2000",
-      smallImage: "https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=300",
+      mainImage: img.src,
+      smallImage: img.src,
       accent: "bg-blue-500",
       link: "/mens"
     },
@@ -30,8 +31,8 @@ const Banner = () => {
       title: "Kids Collection",
       subtitle: "PLAYFUL & PRACTICAL",
       description: "Comfortable and stylish outfits for little ones",
-      mainImage: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?q=80&w=2000",
-      smallImage: "https://images.unsplash.com/photo-1621452773781-0f992fd1f5cb?q=80&w=300",
+      mainImage: img.src,
+      smallImage: img.src,
       accent: "bg-green-500",
       link: "/kids"
     },
@@ -39,8 +40,8 @@ const Banner = () => {
       title: "Accessories",
       subtitle: "FINISHING TOUCHES",
       description: "Complete your look with perfect details",
-      mainImage: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=2000",
-      smallImage: "https://images.unsplash.com/photo-1576053139778-7e32f2ae3cfd?q=80&w=300",
+      mainImage: img.src,
+      smallImage: img.src,
       accent: "bg-amber-500",
       link: "/accessories"
     }
