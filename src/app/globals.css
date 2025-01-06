@@ -32,3 +32,47 @@
   background-size: 200% auto;
   animation: gradient 8s linear infinite;
 }
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hover-float:hover {
+  animation: float 2s ease-in-out infinite;
+}
+
+@media (max-width: 767px) {
+  .product-images .main-image {
+    opacity: 1;
+  }
+  
+  .product-images .hover-image {
+    opacity: 0;
+  }
+  
+  .product-images.show-hover-image .main-image {
+    opacity: 0;
+  }
+  
+  .product-images.show-hover-image .hover-image {
+    opacity: 1;
+  }
+}
+
+/* Keep desktop hover behavior */
+@media (min-width: 768px) {
+  .group:hover .product-images .main-image {
+    opacity: 0;
+  }
+  
+  .group:hover .product-images .hover-image {
+    opacity: 1;
+  }
+}

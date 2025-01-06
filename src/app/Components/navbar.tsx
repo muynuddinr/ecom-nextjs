@@ -68,7 +68,7 @@ const Navbar = () => {
       <motion.div 
         initial={{ height: 40 }}
         animate={{ height: isScrolled ? 0 : 40 }}
-        className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white overflow-hidden"
+        className="bg-gradient-to-r from-red-600 to-red-500 text-white overflow-hidden"
       >
         <div className="max-w-7xl mx-auto px-4 text-center text-sm font-medium">
           Become a seller today and reach millions of customers! 
@@ -86,8 +86,8 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                MEGA<span className="text-gray-800">MART</span>
+              <span className="text-2xl font-extrabold bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
+                Fash<span className="text-gray-800">AT</span>
               </span>
             </Link>
 
@@ -100,7 +100,7 @@ const Navbar = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products, stores, brands..."
                   className={`w-full pl-12 pr-4 py-2.5 rounded-xl border ${
-                    isSearchFocused ? 'border-indigo-600 ring-2 ring-indigo-100' : 'border-gray-300'
+                    isSearchFocused ? 'border-red-600 ring-2 ring-red-100' : 'border-gray-300'
                   } focus:outline-none transition-all duration-300`}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
@@ -108,8 +108,8 @@ const Navbar = () => {
                 <FaSearch className="absolute left-4 top-3 text-gray-400" />
                 <button 
                   type="submit"
-                  className="absolute right-2 top-1.5 px-4 py-1 bg-indigo-600 text-white rounded-lg 
-                           hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105"
+                  className="absolute right-2 top-1.5 px-4 py-1 bg-red-600 text-white rounded-lg 
+                           hover:bg-red-700 transition-all duration-300 transform hover:scale-105"
                 >
                   Search
                 </button>
@@ -159,7 +159,7 @@ const Navbar = () => {
               <div className="relative hidden md:block">
                 <button 
                   onClick={() => setIsVendorMenuOpen(!isVendorMenuOpen)}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-colors"
+                  className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors"
                 >
                   <FaStore className="h-5 w-5" />
                   <span className="font-medium">Seller Center</span>
@@ -203,7 +203,7 @@ const Navbar = () => {
               </div>
 
               {/* Notifications */}
-              <button className="relative text-gray-700 hover:text-indigo-600 transition-colors">
+              <button className="relative text-gray-700 hover:text-red-600 transition-colors">
                 <FaBell className="h-6 w-6" />
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                   3
@@ -211,19 +211,19 @@ const Navbar = () => {
               </button>
 
               {/* Wishlist */}
-              <Link href="/wishlist" className="hidden md:block text-gray-700 hover:text-indigo-600 transition-colors">
+              <Link href="/wishlist" className="hidden md:block text-gray-700 hover:text-red-600 transition-colors">
                 <FaHeart className="h-6 w-6" />
               </Link>
 
               {/* Cart */}
               <Link href="/cart" className="relative group">
-                <div className="relative text-gray-700 hover:text-indigo-600 transition-colors">
+                <div className="relative text-gray-700 hover:text-red-600 transition-colors">
                   <FaShoppingCart className="h-6 w-6" />
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs rounded-full h-4 w-4 
-                               flex items-center justify-center group-hover:bg-indigo-700"
+                    className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-4 w-4 
+                               flex items-center justify-center group-hover:bg-red-700"
                   >
                     {cartCount}
                   </motion.span>
@@ -252,7 +252,7 @@ const Navbar = () => {
                       <span>Subtotal:</span>
                       <span className="font-medium">$199.98</span>
                     </div>
-                    <button className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 
+                    <button className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 
                                      transition-colors text-sm">
                       Checkout
                     </button>
@@ -264,7 +264,7 @@ const Navbar = () => {
               <div className="relative">
                 <button 
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-colors"
+                  className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors"
                 >
                   <FaUser className="h-6 w-6" />
                 </button>
@@ -296,7 +296,7 @@ const Navbar = () => {
 
               {/* Mobile Menu Button */}
               <button
-                className="lg:hidden text-gray-700 hover:text-indigo-600 transition-colors"
+                className="lg:hidden text-gray-700 hover:text-red-600 transition-colors"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 {isMenuOpen ? <FaTimes className="h-6 w-6" /> : <FaBars className="h-6 w-6" />}
@@ -312,7 +312,7 @@ const Navbar = () => {
                   <input
                     type="text"
                     placeholder="Search..."
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-red-600 focus:ring-2 focus:ring-red-100"
                   />
                 </div>
                 <div className="px-4 py-2 border-t border-gray-200">
@@ -322,7 +322,7 @@ const Navbar = () => {
                       <Link
                         key={item}
                         href={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="flex items-center space-x-2 py-2 px-3 rounded-lg hover:bg-gray-50 text-gray-600 hover:text-indigo-600"
+                        className="flex items-center space-x-2 py-2 px-3 rounded-lg hover:bg-gray-50 text-gray-600 hover:text-red-600"
                       >
                         <span>{item}</span>
                       </Link>
@@ -333,13 +333,13 @@ const Navbar = () => {
                 <div className="px-4 py-2 border-t border-gray-200">
                   <div className="text-sm font-semibold text-gray-800 mb-2">Customer Support</div>
                   <div className="space-y-2">
-                    <Link href="/customer-service" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/customer-service" className="block text-gray-600 hover:text-red-600">
                       Customer Service
                     </Link>
-                    <Link href="/gift-cards" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/gift-cards" className="block text-gray-600 hover:text-red-600">
                       Gift Cards
                     </Link>
-                    <Link href="/track-order" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/track-order" className="block text-gray-600 hover:text-red-600">
                       Track Order
                     </Link>
                   </div>
@@ -360,16 +360,16 @@ const Navbar = () => {
                 <div className="px-4 py-2 border-t border-gray-200">
                   <div className="text-sm font-semibold text-gray-800 mb-2">Categories</div>
                   <div className="space-y-2">
-                    <Link href="/category/electronics" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/category/electronics" className="block text-gray-600 hover:text-red-600">
                       Electronics & Gadgets
                     </Link>
-                    <Link href="/category/fashion" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/category/fashion" className="block text-gray-600 hover:text-red-600">
                       Fashion & Apparel
                     </Link>
-                    <Link href="/category/home" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/category/home" className="block text-gray-600 hover:text-red-600">
                       Home & Living
                     </Link>
-                    <Link href="/category/beauty" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/category/beauty" className="block text-gray-600 hover:text-red-600">
                       Beauty & Health
                     </Link>
                   </div>
@@ -378,13 +378,13 @@ const Navbar = () => {
                 <div className="px-4 py-2 border-t border-gray-200">
                   <div className="text-sm font-semibold text-gray-800 mb-2">Quick Links</div>
                   <div className="space-y-2">
-                    <Link href="/mens" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/mens" className="block text-gray-600 hover:text-red-600">
                       Mens
                     </Link>
-                    <Link href="/womens" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/womens" className="block text-gray-600 hover:text-red-600">
                       Womens
                     </Link>
-                    <Link href="/kids" className="block text-gray-600 hover:text-indigo-600">
+                    <Link href="/kids" className="block text-gray-600 hover:text-red-600">
                       Kids
                     </Link>
                     <Link href="/accessories" className="block text-red-500 hover:text-red-600">
@@ -405,7 +405,7 @@ const Navbar = () => {
             {/* Categories Dropdown */}
             <div className="relative group">
               <button 
-                className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 py-3 px-4 font-medium"
+                className="flex items-center space-x-2 text-gray-700 hover:text-red-600 py-3 px-4 font-medium"
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
               >
                 <FaBars className="h-4 w-4" />
@@ -448,13 +448,13 @@ const Navbar = () => {
                 <Link 
                   key={item}
                   href={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="text-gray-600 hover:text-indigo-600 font-medium relative group"
+                  className="text-gray-600 hover:text-red-600 font-medium relative group"
                 >
                   {item}
                   <motion.span
                     initial={{ scaleX: 0 }}
                     whileHover={{ scaleX: 1 }}
-                    className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 origin-left"
+                    className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 origin-left"
                   />
                 </Link>
               ))}
@@ -462,13 +462,13 @@ const Navbar = () => {
 
             {/* Right Side Links */}
             <div className="hidden md:flex items-center ml-auto space-x-6">
-              <Link href="/customer-service" className="text-gray-600 hover:text-indigo-600 text-sm">
+              <Link href="/customer-service" className="text-gray-600 hover:text-red-600 text-sm">
                 Customer Service
               </Link>
-              <Link href="/gift-cards" className="text-gray-600 hover:text-indigo-600 text-sm">
+              <Link href="/gift-cards" className="text-gray-600 hover:text-red-600 text-sm">
                 Gift Cards
               </Link>
-              <Link href="/track-order" className="text-gray-600 hover:text-indigo-600 text-sm">
+              <Link href="/track-order" className="text-gray-600 hover:text-red-600 text-sm">
                 Track Order
               </Link>
             </div>

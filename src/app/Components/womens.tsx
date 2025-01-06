@@ -1,11 +1,11 @@
 "use client"
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { FiHeart, FiGrid, FiList, FiChevronDown } from "react-icons/fi";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import Image from 'next/image';
 import { memo } from "react";
-import image from "../../../public/banner.jpg"
-import img from "../../../public/womens.jpg"
+import img from "../../../public/mens.jpg"
+import img1 from "../../../public/womens.jpg"
 
 interface Product {
   id: number;
@@ -15,6 +15,7 @@ interface Product {
   sizes?: string[];
   color: string;
   image: string;
+  hoverImage: string;
   originalPrice: number;
   rating: number;
   isNew: boolean;
@@ -36,7 +37,7 @@ const INITIAL_FILTERS = {
   colors: [] as string[]
 };
 
-const categories = ["shirts", "pants", "t-shirts", "hoodies"];
+const categories = ["dresses", "tops", "skirts", "pants", "bags", "accessories"];
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const colors = [
   { name: "Black", code: "#000000" },
@@ -47,7 +48,7 @@ const colors = [
   { name: "Red", code: "#DC143C" },
 ];
 
-const filterProducts = (products: Product[], activeFilters: Filters) => {
+const filterProducts = (products: readonly Product[], activeFilters: Filters) => {
   return products.filter(product => {
     if (product.price < activeFilters.priceRange[0] || 
         product.price > activeFilters.priceRange[1]) {
@@ -73,162 +74,159 @@ const filterProducts = (products: Product[], activeFilters: Filters) => {
   });
 };
 
-const WomensProductPage = () => {
-  const products = useMemo(() => [
-    {
-      id: 1,
-      name: "Designer Floral Dress",
-      price: 24999,
-      originalPrice: 29999,
-      rating: 4.5,
-      image: img.src,
-      isNew: true,
-      isTrending: true,
-      sizes: ["S", "M", "L", "XL"],
-      color: "Blue",
-      category: "dresses"
-    },
-    {
-      id: 2,
-      name: "Silk Blouse",
-      price: 3999,
-      originalPrice: 4999,
-      rating: 4.0,
-      image: img.src,
-      isNew: false,
-      isTrending: true,
-      sizes: ["S", "M", "L", "XL"],
-      color: "Red",
-      category: "tops"
-    },
-    {
-      id: 3,
-      name: "Elegant Evening Gown",
-      price: 199.99,
-      originalPrice: 249.99,
-      rating: 4.8,
-      image: img.src,
-      isNew: true,
-      isTrending: false,
-      sizes: ["M", "L", "XL"],
-      color: "Black",
-      category: "dresses"
-    },
-    {
-      id: 4,
-      name: "High-Waist Skirt",
-      price: 79.99,
-      originalPrice: 99.99,
-      rating: 4.3,
-      image: img.src,
-      isNew: false,
-      isTrending: true,
-      sizes: ["S", "M", "L", "XL"],
-      color: "Pink",
-      category: "skirts"
-    },
-    {
-      id: 5,
-      name: "Casual Summer Top",
-      price: 29.99,
-      originalPrice: 39.99,
-      rating: 4.6,
-      image: img.src,
-      isNew: true,
-      isTrending: false,
-      sizes: ["S", "M", "L"],
-      color: "White",
-      category: "tops"
-    },
-    {
-      id: 6,
-      name: "Designer Handbag",
-      price: 69.99,
-      originalPrice: 89.99,
-      rating: 4.7,
-      image: img.src,
-      isNew: false,
-      isTrending: true,
-      sizes: ["One Size"],
-      color: "Brown",
-      category: "accessories"
-    },
-    {
-      id: 7,
-      name: "Floral Maxi Dress",
-      price: 84.99,
-      originalPrice: 99.99,
-      rating: 4.4,
-      image: img.src,
-      isNew: true,
-      isTrending: false,
-      sizes: ["M", "L", "XL"],
-      color: "Floral",
-      category: "dresses"
-    },
-    {
-      id: 8,
-      name: "Slim Fit Pants",
-      price: 89.99,
-      originalPrice: 109.99,
-      rating: 4.2,
-      image: img.src,
-      isNew: false,
-      isTrending: true,
-      sizes: ["S", "M", "L", "XL"],
-      color: "Black",
-      category: "pants"
-    },
-    {
-      id: 9,
-      name: "Cashmere Sweater",
-      price: 119.99,
-      originalPrice: 149.99,
-      rating: 4.9,
-      image: img.src,
-      isNew: true,
-      isTrending: false,
-      sizes: ["S", "M", "L"],
-      color: "Beige",
-      category: "tops"
-    },
-    {
-      id: 10,
-      name: "Cocktail Dress",
-      price: 199.99,
-      originalPrice: 249.99,
-      rating: 4.8,
-      image: img.src,
-      isNew: true,
-      isTrending: false,
-      sizes: ["M", "L", "XL"],
-      color: "Red",
-      category: "dresses"
-    },
+// Move these constants outside the component to prevent recreating them on each render
+const INITIAL_PRODUCTS = [
+  {
+    id: 1,
+    name: "Designer Leather Handbag",
+    price: 24999,
+    originalPrice: 29999,
+    rating: 4.5,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: true,
+    isTrending: true,
+    sizes: ["S", "M", "L"],
+    color: "Black",
+    category: "bags"
+  },
+  {
+    id: 2,
+    name: "Floral Summer Dress",
+    price: 3999,
+    originalPrice: 4999,
+    rating: 4.0,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: false,
+    isTrending: true,
+    sizes: ["S", "M", "L", "XL"],
+    color: "Blue",
+    category: "dresses"
+  },
+  {
+    id: 3,
+    name: "Designer Leather Handbag",
+    price: 24999,
+    originalPrice: 29999,
+    rating: 4.5,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: true,
+    isTrending: false,
+    sizes: ["M", "L", "XL"],
+    color: "Navy",
+    category: "dresses"
+  },
+  {
+    id: 4,
+    name: "Slim Fit Chinos",
+    price: 7999,
+    originalPrice: 9999,
+    rating: 4.3,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: false,
+    isTrending: true,
+    sizes: ["S", "M", "L", "XL"],
+    color: "Gold",
+    category: "pants"
+  },
+  {
+    id: 5,
+    name: "Cotton V-Neck T-Shirt",
+    price: 2999,
+    originalPrice: 3999,
+    rating: 4.6,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: true,
+    isTrending: false,
+    sizes: ["S", "M", "L"],
+    color: "Gray",
+    category: "t-shirts"
+  },
+  {
+    id: 6,
+    name: "Hooded Sweatshirt",
+    price: 6999,
+    originalPrice: 8999,
+    rating: 4.7,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: false,
+    isTrending: true,
+    sizes: ["S", "M", "L", "XL"],
+    color: "Red",
+    category: "hoodies"
+  },
+  {
+    id: 7,
+    name: "Striped Oxford Shirt",
+    price: 8499,
+    originalPrice: 9999,
+    rating: 4.4,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: true,
+    isTrending: false,
+    sizes: ["M", "L", "XL"],
+    color: "Blue",
+    category: "shirts"
+  },
+  {
+    id: 8,
+    name: "Cargo Pants",
+    price: 8999,
+    originalPrice: 10999,
+    rating: 4.2,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: false,
+    isTrending: true,
+    sizes: ["S", "M", "L", "XL"],
+    color: "Black",
+    category: "pants"
+  },
+  {
+    id: 9,
+    name: "Wool Blend Sweater",
+    price: 11999,
+    originalPrice: 14999,
+    rating: 4.9,
+    image: img1.src,
+    hoverImage: img.src,
+    isNew: true,
+    isTrending: false,
+    sizes: ["S", "M", "L"],
+    color: "Gray",
+    category: "hoodies"
+  },
+  {
+    id: 10,
+    name: "Urban Casual Blazer",
+    price: 19999,
+    originalPrice: 24999,
+    rating: 4.8,
+    image: img.src,
+    hoverImage: img1.src,
+    isNew: true,
+    isTrending: false,
+    sizes: ["M", "L", "XL"],
+    color: "Navy",
+    category: "jackets"
+  },
+];
 
-  ], []);
-
-  const [viewMode, setViewMode] = useState("grid");
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+// Create a custom hook for filter logic
+const useProductFilters = (initialProducts: readonly Product[]) => {
   const [tempFilters, setTempFilters] = useState(INITIAL_FILTERS);
   const [activeFilters, setActiveFilters] = useState(INITIAL_FILTERS);
   const [hasFilterChanges, setHasFilterChanges] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredProducts = useMemo(() => 
-    filterProducts(products, activeFilters),
-    [products, activeFilters]
-  );
-
-  const paginatedProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    const endIndex = startIndex + PRODUCTS_PER_PAGE;
-    return filteredProducts.slice(startIndex, endIndex);
-  }, [filteredProducts, currentPage]);
-
-  const totalPages = useMemo(() => 
-    Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE),
-    [filteredProducts]
+    filterProducts(initialProducts, activeFilters),
+    [initialProducts, activeFilters]
   );
 
   const handleTempFilterChange = useCallback((type: string, value: string[] | number[] | string | number) => {
@@ -242,7 +240,6 @@ const WomensProductPage = () => {
   const handleApplyFilters = useCallback(() => {
     setActiveFilters(tempFilters);
     setHasFilterChanges(false);
-    setIsMobileFilterOpen(false);
   }, [tempFilters]);
 
   const handleResetFilters = useCallback(() => {
@@ -251,29 +248,151 @@ const WomensProductPage = () => {
     setHasFilterChanges(false);
   }, []);
 
-  return (
-    <div className="min-h-screen bg-[#FAFAFA]">
-      {/* Hero Section - Simplified without buttons */}
-      <div className="relative h-[300px] md:h-[400px] bg-cover bg-center" style={{ backgroundImage: `url(${image.src})` }}>
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white p-4">
-          <h1 className="text-2xl md:text-4xl font-bold text-center">Elegance Defined – Womens Collection</h1>
-        </div>
-      </div>
+  return {
+    tempFilters,
+    hasFilterChanges,
+    filteredProducts,
+    handleTempFilterChange,
+    handleApplyFilters,
+    handleResetFilters
+  };
+};
 
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
-        {/* Main content area */}
-        <div className="flex flex-col md:flex-row gap-4 md:gap-8">
-          {/* Filters Sidebar - Modified for slide-up mobile modal */}
+// Create a custom hook for product sorting and pagination
+const useProductSorting = (filteredProducts: Product[]) => {
+  const [sortBy, setSortBy] = useState('featured');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const sortedProducts = useMemo(() => {
+    const sorted = [...filteredProducts];
+    switch (sortBy) {
+      case 'price-asc':
+        return sorted.sort((a, b) => a.price - b.price);
+      case 'price-desc':
+        return sorted.sort((a, b) => b.price - a.price);
+      case 'rating':
+        return sorted.sort((a, b) => b.rating - a.rating);
+      default:
+        return sorted;
+    }
+  }, [filteredProducts, sortBy]);
+
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    return sortedProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+  }, [sortedProducts, currentPage]);
+
+  const totalPages = Math.ceil(sortedProducts.length / PRODUCTS_PER_PAGE);
+
+  return {
+    sortBy,
+    setSortBy,
+    currentPage,
+    setCurrentPage,
+    paginatedProducts,
+    totalPages
+  };
+};
+
+const WomensProductPage = () => {
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const products = useMemo(() => INITIAL_PRODUCTS, []);
+  const [viewMode, setViewMode] = useState("grid");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const effectiveViewMode = isMobile ? "list" : viewMode;
+
+  const {
+    tempFilters,
+    hasFilterChanges,
+    filteredProducts,
+    handleTempFilterChange,
+    handleApplyFilters,
+    handleResetFilters
+  } = useProductFilters(products);
+
+  const {
+    sortBy,
+    setSortBy,
+    currentPage,
+    setCurrentPage,
+    paginatedProducts,
+    totalPages
+  } = useProductSorting(filteredProducts);
+
+  const [wishlist, setWishlist] = useState<number[]>([]);
+
+  const toggleWishlist = useCallback((productId: number) => {
+    setWishlist(prev => 
+      prev.includes(productId) 
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
+  }, []);
+
+  const setupIntersectionObserver = useCallback((productId: number, element: HTMLElement) => {
+    if (!isMobile) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const imageContainer = element.querySelector('.product-images');
+            if (imageContainer) {
+              imageContainer.classList.add('show-hover-image');
+            }
+          } else {
+            const imageContainer = element.querySelector('.product-images');
+            if (imageContainer) {
+              imageContainer.classList.remove('show-hover-image');
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+
+    observer.observe(element);
+    return observer;
+  }, [isMobile]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Updated Page Title */}
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent mb-4">
+            Womens Collection
+          </h1>
+          <p className="text-gray-600 text-lg">Discover our curated collection of contemporary womens fashion</p>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Modified Filters Sidebar */}
           <div className={`
             fixed md:relative md:inset-auto inset-x-0 bottom-0 z-30 
-            bg-white md:bg-transparent
+            backdrop-blur-lg md:backdrop-blur-none
             ${isMobileFilterOpen ? 'translate-y-0' : 'translate-y-full'} 
-            md:translate-y-0 transition-transform duration-300 ease-in-out
+            md:translate-y-0 transition-all duration-300
             ${isMobileFilterOpen ? 'flex' : 'hidden md:flex'}
-            flex-col md:w-64
+            flex-col md:w-72
             max-h-[90vh] md:max-h-none
           `}>
-            <div className="bg-white p-4 rounded-t-2xl md:rounded-lg shadow-md overflow-y-auto">
+            <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-100">
               {/* Mobile header */}
               <div className="flex justify-between items-center md:hidden mb-4">
                 <h3 className="font-bold text-lg">Filters</h3>
@@ -364,7 +483,7 @@ const WomensProductPage = () => {
                       }}
                       className={`px-3 py-1 rounded-md transition-all ${
                         tempFilters.sizes.includes(size) 
-                          ? 'bg-[#1E2A38] text-white' 
+                          ? 'bg-red-600 text-white' 
                           : 'bg-gray-100 hover:bg-gray-200'
                       }`}
                     >
@@ -389,7 +508,7 @@ const WomensProductPage = () => {
                       }}
                       className={`w-8 h-8 rounded-full border-2 ${
                         tempFilters.colors.includes(color.name) 
-                          ? 'border-[#1E90FF]' 
+                          ? 'border-red-500' 
                           : 'border-transparent'
                       }`}
                       style={{ backgroundColor: color.code }}
@@ -407,7 +526,7 @@ const WomensProductPage = () => {
                     disabled={!hasFilterChanges}
                     className={`flex-1 py-2 px-4 rounded-lg ${
                       hasFilterChanges
-                        ? 'bg-[#1E90FF] text-white hover:bg-blue-600'
+                        ? 'bg-red-600 text-white hover:bg-red-700'
                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     }`}
                   >
@@ -424,74 +543,126 @@ const WomensProductPage = () => {
             </div>
           </div>
 
-          {/* Product Grid - Improved mobile layout */}
+          {/* Enhanced Product Grid Section */}
           <div className="flex-1">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-              <div className="flex items-center space-x-4 w-full sm:w-auto justify-center">
+            {/* Modified toolbar */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-gray-100">
+              <div className="hidden sm:flex items-center space-x-4 w-full sm:w-auto">
                 <button
                   onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded flex-1 sm:flex-none ${viewMode === "grid" ? 'bg-[#1E2A38] text-white' : 'bg-gray-100'}`}
+                  className={`p-3 rounded-xl flex items-center gap-2 transition-all ${
+                    viewMode === "grid" 
+                      ? 'bg-gradient-to-r from-red-500 to-red-700 text-white' 
+                      : 'bg-gray-100 hover:bg-gray-200'
+                  }`}
                 >
-                  <FiGrid className="mx-auto" />
+                  <FiGrid /> <span>Grid</span>
                 </button>
                 <button
                   onClick={() => setViewMode("list")}
-                  className={`p-2 rounded flex-1 sm:flex-none ${viewMode === "list" ? 'bg-[#1E2A38] text-white' : 'bg-gray-100'}`}
+                  className={`p-3 rounded-xl flex items-center gap-2 transition-all ${
+                    viewMode === "list" 
+                      ? 'bg-gradient-to-r from-red-500 to-red-700 text-white' 
+                      : 'bg-gray-100 hover:bg-gray-200'
+                  }`}
                 >
-                  <FiList className="mx-auto" />
+                  <FiList /> <span>List</span>
                 </button>
               </div>
 
-              <select className="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option>Sort by: Featured</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Most Popular</option>
+              <select 
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full sm:w-auto px-4 py-3 border rounded-lg bg-white/80 backdrop-blur-sm"
+              >
+                <option value="featured">Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
               </select>
             </div>
 
-            {/* Product grid with improved spacing */}
+            {/* Modified Product Cards Grid - single column on mobile */}
             <div className={`grid ${
-              viewMode === "grid" 
-                ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6' 
-                : 'grid-cols-1 gap-4'
+              effectiveViewMode === "grid" 
+                ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8' 
+                : 'grid-cols-1 gap-6'
             }`}>
               {paginatedProducts.map((product) => (
-                <div key={product.id} className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all">
-                  <div className="relative pb-[100%]">
+                <div
+                  key={product.id}
+                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-100 group"
+                  ref={(el) => {
+                    if (el) {
+                      setupIntersectionObserver(product.id, el);
+                    }
+                  }}
+                >
+                  <div className="relative pb-[100%] product-images">
                     <Image
                       src={product.image}
                       alt={product.name}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover transition-opacity duration-300 main-image"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="flex justify-center space-x-2">
-                        <button className="px-4 py-2 bg-[#1E90FF] text-white rounded-lg hover:bg-blue-600">Add to Cart</button>
-                        <button className="p-2 bg-white text-[#DC143C] rounded-full hover:bg-gray-100">
-                          <FiHeart />
-                        </button>
+                    <Image
+                      src={product.hoverImage}
+                      alt={`${product.name} hover`}
+                      fill
+                      className="object-cover absolute top-0 left-0 opacity-0 transition-opacity duration-300 hover-image"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                    {/* Badges and wishlist button */}
+                    <div className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start">
+                      <div className="flex gap-2">
+                        {product.isNew && (
+                          <span className="px-4 py-1.5 bg-red-500/90 backdrop-blur-sm text-white text-sm font-medium rounded-full shadow-lg">
+                            New
+                          </span>
+                        )}
+                        {product.isTrending && (
+                          <span className="px-4 py-1.5 bg-yellow-400/90 backdrop-blur-sm text-black text-sm font-medium rounded-full shadow-lg">
+                            Trending
+                          </span>
+                        )}
                       </div>
+                      <button
+                        onClick={() => toggleWishlist(product.id)}
+                        className={`p-3 rounded-full ${
+                          wishlist.includes(product.id) 
+                            ? 'bg-red-500 text-white' 
+                            : 'bg-white/80'
+                        }`}
+                      >
+                        <FiHeart className={wishlist.includes(product.id) ? 'fill-current' : ''} />
+                      </button>
                     </div>
-                    {product.isNew && (
-                      <span className="absolute top-2 left-2 px-2 py-1 bg-[#DC143C] text-white text-sm rounded">New</span>
-                    )}
-                    {product.isTrending && (
-                      <span className="absolute top-2 right-2 px-2 py-1 bg-[#FFD700] text-black text-sm rounded">Trending</span>
-                    )}
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg mb-2">{product.name}</h3>
+                  
+                  {/* Product info */}
+                  <div className="p-6">
+                    <h3 className="font-bold text-lg mb-3">
+                      {product.name}
+                    </h3>
+                    <button className="w-full mb-4 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl">
+                      Add to Cart
+                    </button>
                     <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-lg font-bold text-[#1E90FF]">₹{product.price}</span>
-                        <span className="ml-2 text-sm line-through text-gray-500">₹{product.originalPrice}</span>
-                      </div>
-                      <div className="flex text-[#FFD700]">
-                        {[...Array(5)].map((_, i) => (
-                          i < Math.floor(product.rating) ? <AiFillStar key={i} /> : <AiOutlineStar key={i} />
-                        ))}
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                          <span className="text-xl font-bold bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
+                            ₹{product.price}
+                          </span>
+                          <span className="text-sm line-through text-gray-400">₹{product.originalPrice}</span>
+                        </div>
+                        <div className="flex text-yellow-400">
+                          {[...Array(5)].map((_, i) => (
+                            i < Math.floor(product.rating) ? 
+                              <AiFillStar key={i} className="w-4 h-4" /> : 
+                              <AiOutlineStar key={i} className="w-4 h-4" />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -499,10 +670,10 @@ const WomensProductPage = () => {
               ))}
             </div>
 
-            {/* Responsive pagination */}
+            {/* Enhanced pagination with glassmorphism */}
             {totalPages > 1 && (
-              <div className="mt-8 flex justify-center">
-                <div className="flex flex-wrap justify-center gap-2">
+              <div className="mt-12 flex justify-center">
+                <div className="flex flex-wrap justify-center gap-2 bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-gray-100">
                   <button 
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
@@ -521,7 +692,7 @@ const WomensProductPage = () => {
                       onClick={() => setCurrentPage(index + 1)}
                       className={`w-8 sm:w-10 h-8 sm:h-10 rounded-lg ${
                         currentPage === index + 1 
-                          ? 'bg-[#1E2A38] text-white' 
+                          ? 'bg-gradient-to-r from-red-500 to-red-700 text-white' 
                           : 'bg-gray-100 hover:bg-gray-200'
                       }`}
                     >
@@ -547,10 +718,10 @@ const WomensProductPage = () => {
         </div>
       </div>
 
-      {/* Improved mobile filter button */}
+      {/* Enhanced mobile filter button with gradient */}
       <button
         onClick={() => setIsMobileFilterOpen(true)}
-        className="fixed bottom-4 right-4 md:hidden  p-4 bg-[#1E2A38] text-white rounded-full shadow-lg flex items-center gap-2"
+        className="fixed bottom-6 right-6 md:hidden px-6 py-4 bg-gradient-to-r from-red-500 to-red-700 text-white rounded-full shadow-xl flex items-center gap-2 hover:opacity-90 transition-opacity"
       >
         <span>Filters</span>
         <FiChevronDown className={`transform ${isMobileFilterOpen ? 'rotate-180' : 'rotate-0'} transition-transform`} />
