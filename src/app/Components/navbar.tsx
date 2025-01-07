@@ -17,6 +17,7 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,6 +51,15 @@ const Navbar = () => {
     }
   }, [searchQuery]);
 
+  useEffect(() => {
+    // Simulating auth check - replace with your actual auth logic
+    const checkAuth = () => {
+      const isLoggedIn = localStorage.getItem('isAuthenticated') === 'true';
+      setIsAuthenticated(isLoggedIn);
+    };
+    checkAuth();
+  }, []);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -59,6 +69,105 @@ const Navbar = () => {
   };
 
   const cartCount = 2; // Replace with actual cart count
+
+  const handleLogout = () => {
+    localStorage.setItem('isAuthenticated', 'false');
+    setIsAuthenticated(false);
+  };
+
+  const renderUserMenu = () => (
+    <div className="relative">
+      <button 
+        onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+        className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors"
+      >
+        <FaUser className="h-6 w-6" />
+      </button>
+
+      {/* Enhanced User Mega Menu */}
+      <AnimatePresence>
+        {isUserMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute right-0 mt-2 w-[300px] bg-white rounded-xl shadow-lg py-4 border"
+          >
+            {isAuthenticated ? (
+              // Logged in user view
+              <>
+                <div className="px-4 py-3 border-b">
+                  <p className="text-sm font-medium text-gray-900">Welcome back!</p>
+                  <p className="text-xs text-gray-500">Manage your account</p>
+                </div>
+                <div className="grid grid-cols-2 gap-2 p-4">
+                  <Link href="/account" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-50">
+                    <FaUser className="h-5 w-5 text-gray-400 mb-1" />
+                    <span className="text-sm text-gray-700">Profile</span>
+                  </Link>
+                  <Link href="/orders" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-50">
+                    <FaBox className="h-5 w-5 text-gray-400 mb-1" />
+                    <span className="text-sm text-gray-700">Orders</span>
+                  </Link>
+                  <Link href="/wishlist" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-50">
+                    <FaHeart className="h-5 w-5 text-gray-400 mb-1" />
+                    <span className="text-sm text-gray-700">Wishlist</span>
+                  </Link>
+                  <Link href="/settings" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-50">
+                    <FaCog className="h-5 w-5 text-gray-400 mb-1" />
+                    <span className="text-sm text-gray-700">Settings</span>
+                  </Link>
+                </div>
+                <div className="px-4 pt-2 border-t">
+                  <button 
+                    onClick={handleLogout}
+                    className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-gray-50 rounded-lg"
+                  >
+                    <FaSignOutAlt className="h-4 w-4 mr-3" />
+                    Logout
+                  </button>
+                </div>
+              </>
+            ) : (
+              // Guest view
+              <>
+                <div className="px-4 py-3 border-b">
+                  <p className="text-sm font-medium text-gray-900">Welcome to FashAT</p>
+                  <p className="text-xs text-gray-500">Join us or sign in to your account</p>
+                </div>
+                <div className="p-4 space-y-3">
+                  <Link 
+                    href="/login"
+                    className="block w-full px-4 py-2 text-center bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link 
+                    href="/register"
+                    className="block w-full px-4 py-2 text-center border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Create Account
+                  </Link>
+                </div>
+                <div className="px-4 pt-2 border-t">
+                  <div className="text-xs text-gray-500 mb-2">Quick Links:</div>
+                  <Link href="/track-order" className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                    <FaBox className="h-4 w-4 mr-3 text-gray-400" />
+                    Track Order
+                  </Link>
+                  <Link href="/help" className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                    <FaBell className="h-4 w-4 mr-3 text-gray-400" />
+                    Help Center
+                  </Link>
+                </div>
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 
   return (
     <div className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -261,38 +370,7 @@ const Navbar = () => {
               </Link>
 
               {/* User Account */}
-              <div className="relative">
-                <button 
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors"
-                >
-                  <FaUser className="h-6 w-6" />
-                </button>
-
-                {/* User Dropdown */}
-                {isUserMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border"
-                  >
-                    <Link href="/account" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                      <FaUser className="h-4 w-4 mr-3 text-gray-400" />
-                      My Account
-                    </Link>
-                    <Link href="/orders" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                      <FaBox className="h-4 w-4 mr-3 text-gray-400" />
-                      My Orders
-                    </Link>
-                    <Link href="/logout" className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
-                      <FaSignOutAlt className="h-4 w-4 mr-3 text-red-500" />
-                      Logout
-                    </Link>
-                  </motion.div>
-                )}
-              </div>
+              {renderUserMenu()}
 
               {/* Mobile Menu Button */}
               <button

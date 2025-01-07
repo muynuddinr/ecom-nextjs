@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { memo } from "react";
 import img from "../../../public/mens.jpg"
 import img1 from "../../../public/womens.jpg"
+import Link from 'next/link';
 
 interface Product {
   id: number;
@@ -75,7 +76,7 @@ const filterProducts = (products: readonly Product[], activeFilters: Filters) =>
 };
 
 // Move these constants outside the component to prevent recreating them on each render
-const INITIAL_PRODUCTS = [
+export const INITIAL_PRODUCTS = [
   {
     id: 1,
     name: "Premium Leather Jacket",
@@ -598,74 +599,79 @@ const MensProductPage = () => {
                     }
                   }}
                 >
-                  <div className="relative pb-[100%] product-images">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover transition-opacity duration-300 main-image"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                    <Image
-                      src={product.hoverImage}
-                      alt={`${product.name} hover`}
-                      fill
-                      className="object-cover absolute top-0 left-0 opacity-0 transition-opacity duration-300 hover-image"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                    {/* Badges and wishlist button */}
-                    <div className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start">
-                      <div className="flex gap-2">
-                        {product.isNew && (
-                          <span className="px-4 py-1.5 bg-red-500/90 backdrop-blur-sm text-white text-sm font-medium rounded-full shadow-lg">
-                            New
-                          </span>
-                        )}
-                        {product.isTrending && (
-                          <span className="px-4 py-1.5 bg-yellow-400/90 backdrop-blur-sm text-black text-sm font-medium rounded-full shadow-lg">
-                            Trending
-                          </span>
-                        )}
+                  <Link href={`/product/${product.id}`} className="block">
+                    <div className="relative pb-[100%] product-images">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover transition-opacity duration-300 main-image"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      <Image
+                        src={product.hoverImage}
+                        alt={`${product.name} hover`}
+                        fill
+                        className="object-cover absolute top-0 left-0 opacity-0 transition-opacity duration-300 hover-image"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      {/* Badges and wishlist button */}
+                      <div className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start">
+                        <div className="flex gap-2">
+                          {product.isNew && (
+                            <span className="px-4 py-1.5 bg-red-500/90 backdrop-blur-sm text-white text-sm font-medium rounded-full shadow-lg">
+                              New
+                            </span>
+                          )}
+                          {product.isTrending && (
+                            <span className="px-4 py-1.5 bg-yellow-400/90 backdrop-blur-sm text-black text-sm font-medium rounded-full shadow-lg">
+                              Trending
+                            </span>
+                          )}
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleWishlist(product.id);
+                          }}
+                          className={`p-3 rounded-full ${
+                            wishlist.includes(product.id) 
+                              ? 'bg-red-500 text-white' 
+                              : 'bg-white/80'
+                          }`}
+                        >
+                          <FiHeart className={wishlist.includes(product.id) ? 'fill-current' : ''} />
+                        </button>
                       </div>
-                      <button
-                        onClick={() => toggleWishlist(product.id)}
-                        className={`p-3 rounded-full ${
-                          wishlist.includes(product.id) 
-                            ? 'bg-red-500 text-white' 
-                            : 'bg-white/80'
-                        }`}
-                      >
-                        <FiHeart className={wishlist.includes(product.id) ? 'fill-current' : ''} />
+                    </div>
+                    
+                    {/* Product info */}
+                    <div className="p-6">
+                      <h3 className="font-bold text-lg mb-3">
+                        {product.name}
+                      </h3>
+                      <button className="w-full mb-4 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl">
+                        Add to Cart
                       </button>
-                    </div>
-                  </div>
-                  
-                  {/* Product info */}
-                  <div className="p-6">
-                    <h3 className="font-bold text-lg mb-3">
-                      {product.name}
-                    </h3>
-                    <button className="w-full mb-4 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl">
-                      Add to Cart
-                    </button>
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
-                            ₹{product.price}
-                          </span>
-                          <span className="text-sm line-through text-gray-400">₹{product.originalPrice}</span>
-                        </div>
-                        <div className="flex text-yellow-400">
-                          {[...Array(5)].map((_, i) => (
-                            i < Math.floor(product.rating) ? 
-                              <AiFillStar key={i} className="w-4 h-4" /> : 
-                              <AiOutlineStar key={i} className="w-4 h-4" />
-                          ))}
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-3">
+                            <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+                              ₹{product.price}
+                            </span>
+                            <span className="text-sm line-through text-gray-400">₹{product.originalPrice}</span>
+                          </div>
+                          <div className="flex text-yellow-400">
+                            {[...Array(5)].map((_, i) => (
+                              i < Math.floor(product.rating) ? 
+                                <AiFillStar key={i} className="w-4 h-4" /> : 
+                                <AiOutlineStar key={i} className="w-4 h-4" />
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               ))}
             </div>
