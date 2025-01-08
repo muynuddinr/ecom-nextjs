@@ -7,8 +7,8 @@ import { INITIAL_PRODUCTS } from '../Components/mens';
 import Link from 'next/link';
 
 
-export default function ProductDetail({ params }: { params: { id: string } }) {
-  const product = INITIAL_PRODUCTS.find(p => p.id === parseInt(params.id));
+export default function ProductDetail({ params }: { params: { slug: string } }) {
+  const product = INITIAL_PRODUCTS.find(p => p.slug === params.slug);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);

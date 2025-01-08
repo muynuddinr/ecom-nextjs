@@ -21,6 +21,7 @@ interface Product {
   rating: number;
   isNew: boolean;
   isTrending: boolean;
+  slug: string;
 }
 
 interface Filters {
@@ -79,6 +80,7 @@ const filterProducts = (products: readonly Product[], activeFilters: Filters) =>
 export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 1,
+    slug: "premium-leather-jacket",
     name: "Premium Leather Jacket",
     price: 24999,
     originalPrice: 29999,
@@ -89,10 +91,11 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Black",
-    category: "jackets"
+    category: "jackets",
   },
   {
     id: 2,
+    slug: "classic-denim-shirt",
     name: "Classic Denim Shirt",
     price: 3999,
     originalPrice: 4999,
@@ -103,7 +106,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Blue",
-    category: "shirts"
+    category: "shirts",
   },
   {
     id: 3,
@@ -117,7 +120,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: false,
     sizes: ["M", "L", "XL"],
     color: "Navy",
-    category: "jackets"
+    category: "jackets",
+    slug: "urban-casual-blazer"
   },
   {
     id: 4,
@@ -131,7 +135,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Gold",
-    category: "pants"
+    category: "pants",
+    slug: "slim-fit-chinos"
   },
   {
     id: 5,
@@ -145,7 +150,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: false,
     sizes: ["S", "M", "L"],
     color: "Gray",
-    category: "t-shirts"
+    category: "t-shirts",
+    slug: "cotton-v-neck-t-shirt"
   },
   {
     id: 6,
@@ -159,7 +165,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Red",
-    category: "hoodies"
+    category: "hoodies",
+    slug: "hooded-sweatshirt"
   },
   {
     id: 7,
@@ -173,7 +180,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: false,
     sizes: ["M", "L", "XL"],
     color: "Blue",
-    category: "shirts"
+    category: "shirts",
+    slug: "striped-oxford-shirt"
   },
   {
     id: 8,
@@ -187,7 +195,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Black",
-    category: "pants"
+    category: "pants",
+    slug: "cargo-pants"
   },
   {
     id: 9,
@@ -201,7 +210,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: false,
     sizes: ["S", "M", "L"],
     color: "Gray",
-    category: "hoodies"
+    category: "hoodies",
+    slug: "wool-blend-sweater"
   },
   {
     id: 10,
@@ -215,7 +225,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isTrending: false,
     sizes: ["M", "L", "XL"],
     color: "Navy",
-    category: "jackets"
+    category: "jackets",
+    slug: "urban-casual-blazer"
   },
 ];
 
@@ -599,7 +610,7 @@ const MensProductPage = () => {
                     }
                   }}
                 >
-                  <Link href={`/product/${product.id}`} className="block">
+                  <Link href={`/product/${product.slug}`} className="block">
                     <div className="relative pb-[100%] product-images">
                       <Image
                         src={product.image}
