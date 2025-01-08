@@ -7,7 +7,6 @@ import { INITIAL_PRODUCTS } from '../Components/mens';
 import Link from 'next/link';
 
 
-
 export default function ProductDetail({ params }: { params: { id: string } }) {
   const product = INITIAL_PRODUCTS.find(p => p.id === parseInt(params.id));
   const [selectedSize, setSelectedSize] = useState('');

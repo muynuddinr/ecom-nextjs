@@ -1,11 +1,13 @@
 'use client'
-import { useState, FormEvent } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import { toast } from 'react-hot-toast';
 import img from '../../../public/womens.jpg';
+import Image from 'next/image';
 
 interface InputFieldProps {
   name: string;
@@ -36,7 +38,7 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -55,7 +57,8 @@ const Login = () => {
         const data = await response.json();
         toast.error(data.message || 'Login failed');
       }
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
       toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
@@ -152,7 +155,7 @@ const Login = () => {
 
             {/* Register Link */}
             <p className="mt-6 text-center text-sm text-gray-700">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="text-red-600 hover:text-red-500 font-medium transition-colors">
                 Create account
               </Link>
@@ -161,10 +164,12 @@ const Login = () => {
 
           {/* Image Section */}
           <div className="hidden md:block w-1/2 relative">
-            <img
+            <Image
               src={img.src}
               alt="Abstract Art"
               className="h-full w-full object-cover"
+              width={img.width}
+              height={img.height}
             />
             <div className="absolute inset-0 flex items-center justify-center p-12">
               <div className="max-w-md text-center bg-black/30 p-8 rounded-3xl backdrop-blur-sm">

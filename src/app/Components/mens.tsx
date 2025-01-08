@@ -75,8 +75,8 @@ const filterProducts = (products: readonly Product[], activeFilters: Filters) =>
   });
 };
 
-// Move these constants outside the component to prevent recreating them on each render
-export const INITIAL_PRODUCTS = [
+// Change from const to export const
+export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 1,
     name: "Premium Leather Jacket",
