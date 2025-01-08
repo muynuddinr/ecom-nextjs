@@ -6,10 +6,13 @@ import Image from 'next/image';
 import { memo } from "react";
 import img from "../../../public/kid.jpg"
 import img1 from "../../../public/womens.jpg"
+import { useRouter } from "next/navigation";
+
 
 interface Product {
   id: number;
   name: string;
+  slug: string;
   price: number;
   category: string;
   sizes?: string[];
@@ -84,10 +87,11 @@ const filterProducts = (products: readonly Product[], activeFilters: Filters) =>
 };
 
 // Move these constants outside the component to prevent recreating them on each render
-const INITIAL_PRODUCTS = [
+export const INITIAL_PRODUCTS = [
   {
     id: 1,
-    name: "Dinosaur Print T-Shirt",
+    name: "Space Explorer T-Shirt",
+    slug: "space-explorer-t-shirt",
     price: 599,
     originalPrice: 799,
     rating: 4.5,
@@ -101,7 +105,8 @@ const INITIAL_PRODUCTS = [
   },
   {
     id: 2,
-    name: "Princess Party Dress",
+    name: "Butterfly Sparkle Dress",
+    slug: "butterfly-sparkle-dress",
     price: 1499,
     originalPrice: 1999,
     rating: 4.8,
@@ -115,7 +120,8 @@ const INITIAL_PRODUCTS = [
   },
   {
     id: 3,
-    name: "School Uniform Set",
+    name: "Classic Navy Uniform",
+    slug: "classic-navy-uniform",
     price: 899,
     originalPrice: 1199,
     rating: 4.6,
@@ -129,7 +135,8 @@ const INITIAL_PRODUCTS = [
   },
   {
     id: 4,
-    name: "Cartoon Print Pajama Set",
+    name: "Unicorn Dreams Nightsuit",
+    slug: "unicorn-dreams-nightsuit",
     price: 699,
     originalPrice: 899,
     rating: 4.7,
@@ -143,7 +150,8 @@ const INITIAL_PRODUCTS = [
   },
   {
     id: 5,
-    name: "Traditional Festival Kurta",
+    name: "Royal Silk Dhoti Set",
+    slug: "royal-silk-dhoti-set",
     price: 1299,
     originalPrice: 1599,
     rating: 4.4,
@@ -154,6 +162,81 @@ const INITIAL_PRODUCTS = [
     sizes: ["6", "7", "8", "10"],
     color: "Yellow",
     category: "ethnic wear"
+  },
+  {
+    id: 6,
+    name: "Winter Wonderland Jacket",
+    slug: "winter-wonderland-jacket",
+    price: 1599,
+    originalPrice: 1999,
+    rating: 4.6,
+    image: img.src,
+    hoverImage: img1.src,
+    isNew: true,
+    isTrending: true,
+    sizes: ["6", "7", "8", "10"],
+    color: "Red",
+    category: "winterwear"
+  },
+  {
+    id: 7,
+    name: "Rainbow Comfort Sneakers",
+    slug: "rainbow-comfort-sneakers",
+    price: 899,
+    originalPrice: 1199,
+    rating: 4.3,
+    image: img.src,
+    hoverImage: img1.src,
+    isNew: true,
+    isTrending: true,
+    sizes: ["6", "7", "8", "10"],
+    color: "Purple",
+    category: "footwear"
+  },
+  {
+    id: 8,
+    name: "Adventure Backpack",
+    slug: "adventure-backpack",
+    price: 799,
+    originalPrice: 999,
+    rating: 4.5,
+    image: img.src,
+    hoverImage: img1.src,
+    isNew: true,
+    isTrending: true,
+    sizes: ["6", "7", "8", "10"],
+    color: "Sky Blue",
+    category: "accessories"
+  },
+  {
+    id: 9,
+    name: "Festive Lehenga Choli",
+    slug: "festive-lehenga-choli",
+    price: 1899,
+    originalPrice: 2299,
+    rating: 4.8,
+    image: img.src,
+    hoverImage: img1.src,
+    isNew: true,
+    isTrending: true,
+    sizes: ["6", "7", "8", "10"],
+    color: "Pink",
+    category: "ethnic wear"
+  },
+  {
+    id: 10,
+    name: "Dinosaur Adventure Hoodie",
+    slug: "dinosaur-adventure-hoodie",
+    price: 1299,
+    originalPrice: 1599,
+    rating: 4.7,
+    image: img.src,
+    hoverImage: img1.src,
+    isNew: true,
+    isTrending: true,
+    sizes: ["4T", "5T", "6", "7", "8"],
+    color: "Green",
+    category: "winterwear"
   }
 ];
 
@@ -234,6 +317,7 @@ const useProductSorting = (filteredProducts: Product[]) => {
 };
 
 const KidsProductPage = () => {
+  const router = useRouter();
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const products = useMemo(() => INITIAL_PRODUCTS, []);
   const [viewMode, setViewMode] = useState("grid");
@@ -280,6 +364,10 @@ const KidsProductPage = () => {
         : [...prev, productId]
     );
   }, []);
+
+  const handleProductClick = useCallback((slug: string) => {
+    router.push(`/product/${slug}`);
+  }, [router]);
 
   const setupIntersectionObserver = useCallback((productId: number, element: HTMLElement) => {
     if (!isMobile) return;
@@ -529,7 +617,8 @@ const KidsProductPage = () => {
               {paginatedProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-100 group"
+                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-100 group cursor-pointer"
+                  onClick={() => handleProductClick(product.slug)}
                   ref={(el) => {
                     if (el) {
                       setupIntersectionObserver(product.id, el);

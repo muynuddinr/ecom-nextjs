@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { memo } from "react";
 import img from "../../../public/mens.jpg"
 import img1 from "../../../public/womens.jpg"
+import { useRouter } from 'next/navigation';
 
 interface Product {
   id: number;
@@ -20,6 +21,7 @@ interface Product {
   rating: number;
   isNew: boolean;
   isTrending: boolean;
+  slug: string;
 }
 
 interface Filters {
@@ -75,7 +77,7 @@ const filterProducts = (products: readonly Product[], activeFilters: Filters) =>
 };
 
 // Move these constants outside the component to prevent recreating them on each render
-const INITIAL_PRODUCTS = [
+export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 1,
     name: "Designer Leather Handbag",
@@ -88,7 +90,8 @@ const INITIAL_PRODUCTS = [
     isTrending: true,
     sizes: ["S", "M", "L"],
     color: "Black",
-    category: "bags"
+    category: "bags",
+    slug: "designer-leather-handbag"
   },
   {
     id: 2,
@@ -102,7 +105,8 @@ const INITIAL_PRODUCTS = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Blue",
-    category: "dresses"
+    category: "dresses",
+    slug: "floral-summer-dress"
   },
   {
     id: 3,
@@ -116,7 +120,8 @@ const INITIAL_PRODUCTS = [
     isTrending: false,
     sizes: ["M", "L", "XL"],
     color: "Navy",
-    category: "dresses"
+    category: "dresses",
+    slug: "floral-summer-dress"
   },
   {
     id: 4,
@@ -130,7 +135,8 @@ const INITIAL_PRODUCTS = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Gold",
-    category: "pants"
+    category: "pants",
+    slug: "slim-fit-chinos"
   },
   {
     id: 5,
@@ -144,7 +150,8 @@ const INITIAL_PRODUCTS = [
     isTrending: false,
     sizes: ["S", "M", "L"],
     color: "Gray",
-    category: "t-shirts"
+    category: "t-shirts",
+    slug: "cotton-v-neck-t-shirt"
   },
   {
     id: 6,
@@ -158,7 +165,8 @@ const INITIAL_PRODUCTS = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Red",
-    category: "hoodies"
+    category: "hoodies",
+    slug: "hooded-sweatshirt"
   },
   {
     id: 7,
@@ -172,7 +180,8 @@ const INITIAL_PRODUCTS = [
     isTrending: false,
     sizes: ["M", "L", "XL"],
     color: "Blue",
-    category: "shirts"
+    category: "shirts",
+    slug: "striped-oxford-shirt"
   },
   {
     id: 8,
@@ -186,7 +195,8 @@ const INITIAL_PRODUCTS = [
     isTrending: true,
     sizes: ["S", "M", "L", "XL"],
     color: "Black",
-    category: "pants"
+    category: "pants",
+    slug: "cargo-pants"
   },
   {
     id: 9,
@@ -200,7 +210,8 @@ const INITIAL_PRODUCTS = [
     isTrending: false,
     sizes: ["S", "M", "L"],
     color: "Gray",
-    category: "hoodies"
+    category: "hoodies",
+    slug: "wool-blend-sweater"
   },
   {
     id: 10,
@@ -214,7 +225,8 @@ const INITIAL_PRODUCTS = [
     isTrending: false,
     sizes: ["M", "L", "XL"],
     color: "Navy",
-    category: "jackets"
+    category: "jackets",
+    slug: "urban-casual-blazer"
   },
 ];
 
@@ -295,6 +307,7 @@ const useProductSorting = (filteredProducts: Product[]) => {
 };
 
 const WomensProductPage = () => {
+  const router = useRouter();
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const products = useMemo(() => INITIAL_PRODUCTS, []);
   const [viewMode, setViewMode] = useState("grid");
@@ -369,6 +382,10 @@ const WomensProductPage = () => {
     observer.observe(element);
     return observer;
   }, [isMobile]);
+
+  const handleProductClick = useCallback((slug: string) => {
+    router.push(`/product/${slug}`);
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 py-12">
@@ -591,7 +608,8 @@ const WomensProductPage = () => {
               {paginatedProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-100 group"
+                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-100 group cursor-pointer"
+                  onClick={() => handleProductClick(product.slug)}
                   ref={(el) => {
                     if (el) {
                       setupIntersectionObserver(product.id, el);

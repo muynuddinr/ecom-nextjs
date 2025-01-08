@@ -6,10 +6,12 @@ import Image from 'next/image';
 import { memo } from "react";
 import img from "../../../public/accessories.jpg"
 import img1 from "../../../public/kid.jpg"
+import { useRouter } from 'next/navigation';
 
 interface Product {
   id: number;
   name: string;
+  slug: string; 
   price: number;
   category: string;
   sizes?: string[];
@@ -75,10 +77,11 @@ const filterProducts = (products: readonly Product[], activeFilters: Filters) =>
 };
 
 // Move these constants outside the component to prevent recreating them on each render
-const INITIAL_PRODUCTS = [
+export const INITIAL_PRODUCTS = [
   {
     id: 1,
     name: "Luxury Chronograph Watch",
+    slug: "luxury-chronograph-watch",
     price: 24999,
     originalPrice: 29999,
     rating: 4.5,
@@ -93,6 +96,7 @@ const INITIAL_PRODUCTS = [
   {
     id: 2,
     name: "Italian Leather Belt",
+    slug: "italian-leather-belt",
     price: 3999,
     originalPrice: 4999,
     rating: 4.0,
@@ -107,6 +111,7 @@ const INITIAL_PRODUCTS = [
   {
     id: 3,
     name: "Designer Sunglasses",
+    slug: "designer-sunglasses",
     price: 12999,
     originalPrice: 15999,
     rating: 4.8,
@@ -121,6 +126,7 @@ const INITIAL_PRODUCTS = [
   {
     id: 4,
     name: "Slim Fit Chinos",
+    slug: "slim-fit-chinos",
     price: 79.99,
     originalPrice: 99.99,
     rating: 4.3,
@@ -135,6 +141,7 @@ const INITIAL_PRODUCTS = [
   {
     id: 5,
     name: "Cotton V-Neck T-Shirt",
+    slug: "cotton-v-neck-t-shirt",
     price: 29.99,
     originalPrice: 39.99,
     rating: 4.6,
@@ -149,6 +156,7 @@ const INITIAL_PRODUCTS = [
   {
     id: 6,
     name: "Hooded Sweatshirt",
+    slug: "hooded-sweatshirt",
     price: 69.99,
     originalPrice: 89.99,
     rating: 4.7,
@@ -163,6 +171,7 @@ const INITIAL_PRODUCTS = [
   {
     id: 7,
     name: "Striped Oxford Shirt",
+    slug: "striped-oxford-shirt",
     price: 84.99,
     originalPrice: 99.99,
     rating: 4.4,
@@ -177,6 +186,7 @@ const INITIAL_PRODUCTS = [
   {
     id: 8,
     name: "Cargo Pants",
+    slug: "cargo-pants",
     price: 89.99,
     originalPrice: 109.99,
     rating: 4.2,
@@ -191,6 +201,7 @@ const INITIAL_PRODUCTS = [
   {
     id: 9,
     name: "Wool Blend Sweater",
+    slug: "wool-blend-sweater",
     price: 119.99,
     originalPrice: 149.99,
     rating: 4.9,
@@ -204,7 +215,8 @@ const INITIAL_PRODUCTS = [
   },
   {
     id: 10,
-    name: "Urban Casual Blazer",
+    name: "Glasses",
+    slug: "glasses",
     price: 199.99,
     originalPrice: 249.99,
     rating: 4.8,
@@ -295,6 +307,7 @@ const useProductSorting = (filteredProducts: Product[]) => {
 };
 
 const AccessoriesPage = () => {
+  const router = useRouter();
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const products = useMemo(() => INITIAL_PRODUCTS, []);
   const [viewMode, setViewMode] = useState("grid");
@@ -369,6 +382,10 @@ const AccessoriesPage = () => {
     observer.observe(element);
     return observer;
   }, [isMobile]);
+
+  const handleProductClick = (slug: string) => {
+    router.push(`/product/${slug}`);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 py-12">
@@ -591,7 +608,8 @@ const AccessoriesPage = () => {
               {paginatedProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-100 group"
+                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-100 group cursor-pointer"
+                  onClick={() => handleProductClick(product.slug)}
                   ref={(el) => {
                     if (el) {
                       setupIntersectionObserver(product.id, el);
@@ -628,7 +646,10 @@ const AccessoriesPage = () => {
                         )}
                       </div>
                       <button
-                        onClick={() => toggleWishlist(product.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleWishlist(product.id);
+                        }}
                         className={`p-3 rounded-full ${
                           wishlist.includes(product.id) 
                             ? 'bg-red-500 text-white' 
@@ -645,7 +666,13 @@ const AccessoriesPage = () => {
                     <h3 className="font-bold text-lg mb-3">
                       {product.name}
                     </h3>
-                    <button className="w-full mb-4 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Your add to cart logic here
+                      }}
+                      className="w-full mb-4 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl"
+                    >
                       Add to Cart
                     </button>
                     <div className="flex items-center justify-between">
