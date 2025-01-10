@@ -7,6 +7,7 @@ import { memo } from "react";
 import img from "../../../public/mens.jpg"
 import img1 from "../../../public/womens.jpg"
 import { useRouter } from 'next/navigation';
+import AddToCartButton from "./AddToCartButton";
 
 interface Product {
   id: number;
@@ -663,9 +664,10 @@ const WomensProductPage = () => {
                     <h3 className="font-bold text-lg mb-3">
                       {product.name}
                     </h3>
-                    <button className="w-full mb-4 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl">
-                      Add to Cart
-                    </button>
+                    <AddToCartButton 
+                      product={product}
+                      className="w-full mb-4 px-6 py-3 text-white rounded-xl"
+                    />
                     <div className="flex items-center justify-between">
                       <div className="space-y-2">
                         <div className="flex items-center gap-3">

@@ -8,9 +8,14 @@ import { INITIAL_PRODUCTS as WOMENS_PRODUCTS } from '../Components/womens';
 import { INITIAL_PRODUCTS as KIDS_PRODUCTS } from '../Components/kids';
 import { INITIAL_PRODUCTS as ACCESSORIES_PRODUCTS } from '../Components/accessories';
 import Link from 'next/link';
+import { useCart } from '../Components/CartCounter';
+import { useRouter } from 'next/navigation';
+import AddToCartButton from './AddToCartButton';
 
 
 export default function ProductDetail({ params }: { params: { slug: string } }) {
+  const { addToCart } = useCart();
+  const router = useRouter();
   const product = INITIAL_PRODUCTS.find(p => p.slug === params.slug);
   const product2 = WOMENS_PRODUCTS.find(p => p.slug === params.slug);
   const product3 = KIDS_PRODUCTS.find(p => p.slug === params.slug);
@@ -33,6 +38,10 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
       </div>
     );
   }
+
+  const handleAddToCart = () => {
+    addToCart(activeProduct, quantity);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100 py-12">
@@ -150,18 +159,14 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
 
             {/* Actions */}
             <div className="flex space-x-4">
-              <button className="flex-1 bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl flex items-center justify-center space-x-2">
-                <FiShoppingCart />
-                <span>Add to Cart</span>
-              </button>
-              <button 
-                onClick={() => setIsWishlisted(!isWishlisted)}
-                className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-                  isWishlisted ? 'bg-red-600 text-white' : 'border border-gray-300'
-                }`}
-              >
-                <FiHeart className={isWishlisted ? 'fill-current' : ''} />
-              </button>
+              <AddToCartButton
+                product={{
+                  ...activeProduct,
+                  quantity: quantity,
+                  selectedSize: selectedSize
+                }}
+                className="flex-1 py-3 rounded-xl text-white flex items-center justify-center gap-2"
+              />
             </div>
 
             {/* Product Details */}

@@ -5,6 +5,7 @@ import { FaShoppingCart, FaUser, FaSearch, FaBars, FaTimes, FaStore,
          FaBox, FaChartLine, FaHeart, FaBell, FaSignOutAlt, FaCog } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useCart } from './CartCounter';
 
 const Navbar = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ const Navbar = () => {
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { cartItems } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,8 +69,6 @@ const Navbar = () => {
       router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
-
-  const cartCount = 2; // Replace with actual cart count
 
   const handleLogout = () => {
     localStorage.setItem('isAuthenticated', 'false');
@@ -334,7 +334,7 @@ const Navbar = () => {
                     className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-4 w-4 
                                flex items-center justify-center group-hover:bg-red-700"
                   >
-                    {cartCount}
+                    {cartItems.length}
                   </motion.span>
                 </div>
                 <motion.div
@@ -343,15 +343,17 @@ const Navbar = () => {
                   className="absolute invisible group-hover:visible -right-4 top-8 bg-white shadow-lg 
                              rounded-lg p-4 w-80 z-50 border"
                 >
-                  <div className="text-sm font-medium text-gray-900 mb-3">Shopping Cart ({cartCount})</div>
-                  {/* Sample Cart Items */}
+                  <div className="text-sm font-medium text-gray-900 mb-3">Shopping Cart ({cartItems.length})</div>
+                  {/* Cart Items */}
                   <div className="space-y-3 max-h-60 overflow-auto">
-                    {[1, 2].map((item) => (
-                      <div key={item} className="flex items-center space-x-3 border-b pb-3">
-                        <div className="w-12 h-12 bg-gray-100 rounded-md"></div>
+                    {cartItems.map((item) => (
+                      <div key={item.uniqueKey} className="flex items-center space-x-3 border-b pb-3">
+                        <div className="w-12 h-12 bg-gray-100 rounded-md">
+                          <img src={item.image} alt={item.name} className="w-full h-full object-cover rounded-md" />
+                        </div>
                         <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-800">Product Name</div>
-                          <div className="text-xs text-gray-500">1 x $99.99</div>
+                          <div className="text-sm font-medium text-gray-800">{item.name}</div>
+                          <div className="text-xs text-gray-500">{item.quantity} x ${item.price}</div>
                         </div>
                       </div>
                     ))}
@@ -359,7 +361,9 @@ const Navbar = () => {
                   <div className="mt-3 pt-3 border-t">
                     <div className="flex justify-between text-sm mb-3">
                       <span>Subtotal:</span>
-                      <span className="font-medium">$199.98</span>
+                      <span className="font-medium">
+                        ${cartItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}
+                      </span>
                     </div>
                     <button className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 
                                      transition-colors text-sm">

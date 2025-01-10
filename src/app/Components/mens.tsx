@@ -7,6 +7,9 @@ import { memo } from "react";
 import img from "../../../public/mens.jpg"
 import img1 from "../../../public/womens.jpg"
 import Link from 'next/link';
+import { useCart } from '../Components/CartCounter';
+import { useRouter } from 'next/navigation';
+import AddToCartButton from './AddToCartButton';
 
 interface Product {
   id: number;
@@ -311,6 +314,8 @@ const MensProductPage = () => {
   const products = useMemo(() => INITIAL_PRODUCTS, []);
   const [viewMode, setViewMode] = useState("grid");
   const [isMobile, setIsMobile] = useState(false);
+  const { addToCart } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -346,12 +351,136 @@ const MensProductPage = () => {
 
   const [wishlist, setWishlist] = useState<number[]>([]);
 
-  const toggleWishlist = useCallback((productId: number) => {
-    setWishlist(prev => 
-      prev.includes(productId) 
-        ? prev.filter(id => id !== productId)
-        : [...prev, productId]
-    );
+  const toggleWishlist = useCallback((e: React.MouseEvent, productId: number) => {
+    e.preventDefault();
+    setWishlist(prev => {
+      const isAdding = !prev.includes(productId);
+      const newWishlist = isAdding 
+        ? [...prev, productId]
+        : prev.filter(id => id !== productId);
+      
+      if (isAdding) {
+        // Create particle container
+        const container = document.createElement('div');
+        container.className = 'fixed z-50 pointer-events-none';
+        container.style.left = `${e.clientX}px`;
+        container.style.top = `${e.clientY}px`;
+
+        // Particle colors
+        const colors = ['#FF69B4', '#FF1493', '#FF0000', '#FFC0CB', '#FFB6C1'];
+        
+        // Create particles
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'absolute w-2 h-2 rounded-full';
+          particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          
+          // Random initial rotation
+          const rotation = Math.random() * 360;
+          // Random distance
+          const distance = 50 + Math.random() * 100;
+          // Random angle
+          const angle = (Math.random() * 360) * (Math.PI / 180);
+          // Random duration between 0.5 and 1.5 seconds
+          const duration = 0.5 + Math.random();
+          
+          const keyframeName = `particle-${i}-${Date.now()}`;
+          const keyframes = `
+            @keyframes ${keyframeName} {
+              0% {
+                transform: rotate(${rotation}deg) translate(0) scale(1);
+                opacity: 1;
+              }
+              50% {
+                opacity: 0.7;
+              }
+              100% {
+                transform: rotate(${rotation + 360}deg) translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0);
+                opacity: 0;
+              }
+            }
+          `;
+
+          const style = document.createElement('style');
+          style.textContent = keyframes;
+          document.head.appendChild(style);
+
+          particle.style.animation = `${keyframeName} ${duration}s ease-out forwards`;
+          container.appendChild(particle);
+        }
+
+        // Create central heart
+        const heart = document.createElement('div');
+        heart.textContent = '❤️';
+        heart.className = 'absolute transform -translate-x-1/2 -translate-y-1/2';
+        heart.style.animation = 'central-heart 0.5s ease-out forwards';
+
+        const centralHeartKeyframes = `
+          @keyframes central-heart {
+            0% {
+              transform: translate(-50%, -50%) scale(0) rotate(0deg);
+              opacity: 0;
+            }
+            50% {
+              transform: translate(-50%, -50%) scale(2) rotate(180deg);
+              opacity: 1;
+            }
+            100% {
+              transform: translate(-50%, -50%) scale(0) rotate(360deg);
+              opacity: 0;
+            }
+          }
+        `;
+
+        const centralHeartStyle = document.createElement('style');
+        centralHeartStyle.textContent = centralHeartKeyframes;
+        document.head.appendChild(centralHeartStyle);
+
+        container.appendChild(heart);
+        document.body.appendChild(container);
+        setTimeout(() => container.remove(), 1500);
+      }
+
+      // Toast notification
+      const toast = document.createElement('div');
+      toast.className = `
+        fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50
+        px-6 py-3 rounded-full shadow-lg
+        flex items-center gap-3
+        transition-all duration-500 ease-out
+        ${isAdding ? 'bg-gradient-to-r from-pink-500 to-red-500' : 'bg-gradient-to-r from-gray-500 to-gray-600'}
+        text-white
+        opacity-0 scale-95 -translate-y-4
+      `;
+
+      const icon = document.createElement('div');
+      icon.className = 'text-xl animate-pulse';
+      icon.textContent = isAdding ? '❤️' : '💔';
+
+      const text = document.createElement('span');
+      text.className = 'font-medium';
+      text.textContent = isAdding ? 'Added to wishlist' : 'Removed from wishlist';
+
+      toast.appendChild(icon);
+      toast.appendChild(text);
+      document.body.appendChild(toast);
+
+      // Animate in
+      requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(0) scale(1)';
+      });
+
+      // Remove toast
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(4rem) scale(0.95)';
+        setTimeout(() => toast.remove(), 500);
+      }, 2000);
+
+      localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+      return newWishlist;
+    });
   }, []);
 
   const setupIntersectionObserver = useCallback((productId: number, element: HTMLElement) => {
@@ -381,6 +510,11 @@ const MensProductPage = () => {
     observer.observe(element);
     return observer;
   }, [isMobile]);
+
+  const handleAddToCart = (e: React.MouseEvent, product: any) => {
+    e.preventDefault(); // Prevent navigation from Link
+    addToCart(product);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100 py-12">
@@ -641,10 +775,7 @@ const MensProductPage = () => {
                           )}
                         </div>
                         <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleWishlist(product.id);
-                          }}
+                          onClick={(e) => toggleWishlist(e, product.id)}
                           className={`p-3 rounded-full ${
                             wishlist.includes(product.id) 
                               ? 'bg-red-500 text-white' 
@@ -661,9 +792,10 @@ const MensProductPage = () => {
                       <h3 className="font-bold text-lg mb-3">
                         {product.name}
                       </h3>
-                      <button className="w-full mb-4 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl">
-                        Add to Cart
-                      </button>
+                      <AddToCartButton 
+                        product={product}
+                        className="w-full mb-4 px-6 py-3 text-white rounded-xl"
+                      />
                       <div className="flex items-center justify-between">
                         <div className="space-y-2">
                           <div className="flex items-center gap-3">

@@ -6,39 +6,20 @@ import img2 from '../../../public/kid.jpg'
 import img3 from '../../../public/womens.jpg'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useCart } from './CartCounter';
 
 interface CartItem {
-  id: number;
+  slug: string;
   name: string;
   price: number;
   quantity: number;
   image: string;
+  category: string;
+  uniqueKey: string;
 }
 
 const Cart: React.FC = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: 99.99,
-      quantity: 1,
-      image: img.src
-    },
-    {
-      id: 2,
-      name: "Smart Watch",
-      price: 199.99,
-      quantity: 2,
-      image: img2.src
-    },
-    {
-      id: 3,
-      name: "Laptop Backpack",
-      price: 49.99,
-      quantity: 1,
-      image: img3.src
-    }
-  ]);
+  const { cartItems, removeFromCart, updateQuantity } = useCart();
   const [total, setTotal] = useState<number>(0);
   const router = useRouter();
 
@@ -48,17 +29,14 @@ const Cart: React.FC = () => {
     setTotal(newTotal);
   }, [cartItems]);
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+  const removeItem = (slug: string) => {
+    removeFromCart(slug);
   };
 
-  const removeItem = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  const handleQuantityChange = (slug: string, newQuantity: number) => {
+    if (newQuantity > 0) {
+      updateQuantity(slug, newQuantity);
+    }
   };
 
   return (
@@ -96,7 +74,7 @@ const Cart: React.FC = () => {
             {/* Products List */}
             <div className="lg:w-2/3 space-y-6">
               {cartItems.map((item) => (
-                <div key={item.id} 
+                <div key={item.uniqueKey} 
                   className="bg-white rounded-2xl p-6 shadow-xl shadow-red-100/50 hover:shadow-red-200/50 transition-shadow">
                   <div className="flex flex-col sm:flex-row gap-6">
                     <div className="relative w-full sm:w-40 h-40">
@@ -112,15 +90,20 @@ const Cart: React.FC = () => {
                       <div>
                         <div className="flex justify-between items-start">
                           <div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+                              {item.name}
+                              <span className="ml-2 text-sm font-normal text-gray-500">
+                                ({item.category})
+                              </span>
+                            </h3>
                             <div className="inline-flex items-center px-3 py-1 bg-red-50 rounded-full">
                               <span className="text-sm text-red-600 font-medium">
-                                ${item.price.toFixed(2)}
+                                ₹{item.price.toFixed(2)}
                               </span>
                             </div>
                           </div>
                           <button
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => removeItem(item.uniqueKey)}
                             className="text-gray-400 hover:text-red-500 transition-colors p-2 hover:bg-red-50 rounded-full"
                           >
                             <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,14 +116,14 @@ const Cart: React.FC = () => {
                       <div className="flex items-center justify-between mt-6">
                         <div className="flex items-center gap-2 bg-gray-50 rounded-full p-1">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => handleQuantityChange(item.uniqueKey, item.quantity - 1)}
                             className="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-sm hover:bg-red-50 transition-colors"
                           >
                             -
                           </button>
                           <span className="w-12 text-center font-medium">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => handleQuantityChange(item.uniqueKey, item.quantity + 1)}
                             className="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-sm hover:bg-red-50 transition-colors"
                           >
                             +
@@ -149,7 +132,7 @@ const Cart: React.FC = () => {
                         <div className="text-right">
                           <p className="text-sm text-gray-500 mb-1">Subtotal</p>
                           <p className="text-lg font-bold text-red-600">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            ₹{(item.price * item.quantity).toFixed(2)}
                           </p>
                         </div>
                       </div>
@@ -167,7 +150,7 @@ const Cart: React.FC = () => {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between text-gray-600">
                     <span>Subtotal</span>
-                    <span className="font-medium">${total.toFixed(2)}</span>
+                    <span className="font-medium">₹{total.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
@@ -175,7 +158,7 @@ const Cart: React.FC = () => {
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Tax</span>
-                    <span className="font-medium">${(total * 0.1).toFixed(2)}</span>
+                    <span className="font-medium">₹{(total * 0.1).toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -183,7 +166,7 @@ const Cart: React.FC = () => {
                   <div className="flex justify-between items-center mb-6">
                     <span className="text-lg text-gray-900 font-medium">Total</span>
                     <span className="text-2xl font-bold text-red-600">
-                      ${(total + (total * 0.1)).toFixed(2)}
+                      ₹{(total + (total * 0.1)).toFixed(2)}
                     </span>
                   </div>
 
